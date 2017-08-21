@@ -21,7 +21,6 @@ N.B.
 
 
 TODO: convert to dm3
-TODO: check this with lower mag images
 
 @author: dr richard f webster
 """
