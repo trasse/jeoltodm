@@ -29,6 +29,7 @@ import os
 import tifffile as tif
 import untangle
 import tkinter as tk
+import tkinter.filedialog
 
 # Camera Length look up dictionary
 def diffperpix(x):
@@ -127,7 +128,7 @@ if __name__ == "__main__":
 
 
     # Open Sesame
-    dirname = tk.filedialog.askdirectory(parent=root,initialdir="\\",title="Choose a Directory...")
+    dirname = tkinter.filedialog.askdirectory(parent=root,initialdir="\\",title="Choose a Directory...")
     os.chdir(dirname)
 
     if len(dirname ) > 0:
@@ -149,6 +150,7 @@ if __name__ == "__main__":
     root.destroy()
 
 """
+Reference:
  Other important info from xml for possible use in the future?
 
  Image size x:         xml.TemReporter2.ImageDataInformation.a_ImageSize.b_width.cdata
