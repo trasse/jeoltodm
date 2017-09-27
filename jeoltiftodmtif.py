@@ -1,6 +1,3 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
-
 """
 Created on Wed Feb  1 09:15:43 2017
 ver: 0.1
@@ -28,8 +25,10 @@ TODO: convert to dm3
 import os
 import tifffile as tif
 import untangle
-import tkinter as tk
-import tkinter.filedialog
+
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog
+from PyQt5.QtGui import QIcon
 
 # Camera Length look up dictionary
 def diffperpix(x):
@@ -124,14 +123,16 @@ def adddm3tags(filename):
     # Delete xml file just created
     os.remove(xml_filename)
 
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    root.title('JEOLtiff to DMtiff')
+def main():
+    app = QApplication(sys.argv)
 
 
+    startingDir = 'C:/Program Files'
+    dialog = QFileDialog()
+    dialog.setFileMode( QFileDialog.FileMode() )
+    dialog.getExistingDirectory( None, 'Open working directory', startingDir )
     # Open Sesame
-    dirname = tkinter.filedialog.askdirectory(parent=root,initialdir="\\",title="Choose a Directory...")
+    dirname = str(QFileDialog.getExistingDirectory(None, "Select Directory"))
     os.chdir(dirname)
 
     if len(dirname ) > 0:
@@ -149,8 +150,12 @@ if __name__ == "__main__":
             if filen[-1] == (".tif" or ".tiff"): # only do TIFF files
                 adddm3tags("{}/{}".format(dirname,file))
 
+    sys.exit(app.exec_())
 
-    root.destroy()
+if __name__ == "__main__":
+    main()
+
+
 
 """
 Reference:
