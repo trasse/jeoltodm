@@ -28,9 +28,9 @@ executables = [
     Executable('jeoltiftodmtif.py', base=base)
 ]
 
-setup(name='simple_PyQt4',
+setup(name='jeoltiftodmtif',
       version='0.1',
-      description='Sample cx_Freeze PyQt4 script',
+      description='jeoltiftodmtif',
       options=options,
       executables=executables
       )
