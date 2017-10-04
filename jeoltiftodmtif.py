@@ -6,7 +6,11 @@ Script for converting JEOL TIFF files in current directory with data embedded
 in xml in the tiff tags into a tiff with the correct meta data to have scale
 included in digital Micrograph...
 
-Warning: May invalidate Institution/JEOL legal agreements.
+Install:
+Install Python (ver 3 or greater)
+Run in command line:
+    pip install tifffile untangle
+
 
 N.B.
     1. can not find where unit for length per pixel is in the JEOL xml data -
@@ -30,7 +34,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog
 from PyQt5.QtGui import QIcon
 
-# Camera Length look up dictionary
+#%% Camera Length look up dictionary
 def diffperpix(x):
     return {
 
@@ -52,10 +56,13 @@ def diffperpix(x):
         }[x]
 
 
-# Function to get xml and add as gatan type (DM readable) of TIFF tags
-def adddm3tags(filename):
+#%%
+#   Function to get xml from JEOL tif and add as gatan type (ImageJ and Digital
+#   Micrograph readable) of TIFF tags
+def addtiftags(filename):
     image = tif.imread(filename)
     print(filename)
+
     # Opens File and gets tag information
     with tif.TiffFile(filename) as tiff:
         for page in tiff:
@@ -65,10 +72,6 @@ def adddm3tags(filename):
                     # Get the JEOL xml data (its in byte format)
                     raw_xml=tag.value
 
-
-            #image = page.asarray()
-
-    # debug: print(raw_xml)
 
     # saves xml data into textfile and decodes it from bytes to a UTF8 string
     # actual file is needed for untangle
@@ -107,7 +110,8 @@ def adddm3tags(filename):
 
     else: print("Wrong Mode investigate {}".format(filename))
 
-
+    # save these tags for Digital micrograph to read scale correctly
+    # TODO add other metadata - microscope etc - work out how DM does this.
     tags = [( 65003, 's', 3, sunitname, False ),
             ( 65004, 's', 3, sunitname, False ),
             ( 65009, 'd', 1, lengthperpix, False ),
@@ -123,14 +127,11 @@ def adddm3tags(filename):
     # Delete xml file just created
     os.remove(xml_filename)
 
+#%%
+# Main function of the script
 def main():
     app = QApplication(sys.argv)
 
-
-    startingDir = 'C:/Program Files'
-    dialog = QFileDialog()
-    dialog.setFileMode( QFileDialog.FileMode() )
-    dialog.getExistingDirectory( None, 'Open working directory', startingDir )
     # Open Sesame
     dirname = str(QFileDialog.getExistingDirectory(None, "Select Directory"))
     os.chdir(dirname)
@@ -140,7 +141,7 @@ def main():
 
     print(os.getcwd())
     print(os.listdir(os.getcwd()))
-    os.mkdir("dm")
+    os.mkdir("these_ones_have_scale") # put files in new folder
 
     for file in os.listdir(os.getcwd()):
         if os.path.isdir(file): continue
@@ -148,10 +149,11 @@ def main():
             print(file)
             filen = os.path.splitext(file)
             if filen[-1] == (".tif" or ".tiff"): # only do TIFF files
-                adddm3tags("{}/{}".format(dirname,file))
+                addtiftags("{}/these_ones_have_scale/{}".format(dirname,file))
 
     sys.exit(app.exec_())
 
+#%%
 if __name__ == "__main__":
     main()
 

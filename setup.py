@@ -28,9 +28,9 @@ executables = [
     Executable('jeoltiftodmtif.py', base=base)
 ]
 
-setup(name='jeoltiftodmtif',
-      version='0.1',
-      description='jeoltiftodmtif',
-      options=options,
-      executables=executables
+setup(
+        name='jeoltiftodmtif',
+        version='0.1',
+        description='jeoltiftodmtif',
+        executables=[exe]
       )
