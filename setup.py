@@ -1,36 +1,34 @@
-# -*- coding: utf-8 -*-
-
-# A simple setup script to create an executable using PyQt4. This also
-# demonstrates the method for creating a Windows executable that does not have
-# an associated console.
-#
-# PyQt4app.py is a very simple type of PyQt4 application
-#
-# Run the build process by running the command 'python setup.py build'
-#
-# If everything works well you should find a subdirectory in the build
-# subdirectory that contains the files needed to run the application
-
-import sys
 from cx_Freeze import setup, Executable
+
+import os
+import sys
+
+PYTHON_INSTALL_DIR = os.path.dirname(os.path.dirname(os.__file__))
+os.environ['TCL_LIBRARY'] = os.path.join(PYTHON_INSTALL_DIR, 'tcl', 'tcl8.6')
+os.environ['TK_LIBRARY'] = os.path.join(PYTHON_INSTALL_DIR, 'tcl', 'tk8.6')
 
 base = None
 if sys.platform == 'win32':
     base = 'Win32GUI'
+    
+addtional_mods = ['numpy.core._methods', 'numpy.lib.format']
 
+
+executables = [Executable("jeoltiftodmtif.py", base=base)]
+
+packages = ["idna"]
 options = {
     'build_exe': {
-        'includes': 'atexit'
-    }
+        'includes': addtional_mods,
+        'packages':packages,
+    },
+
 }
 
-executables = [
-    Executable('jeoltiftodmtif.py', base=base)
-]
-
 setup(
-        name='jeoltiftodmtif',
-        version='0.1',
-        description='jeoltiftodmtif',
-        executables=[exe]
-      )
+    name = "jeoltodm",
+    options = options,
+    version = "0.10.0",
+    description = 'Just some words',
+    executables = executables
+)

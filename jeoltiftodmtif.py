@@ -29,10 +29,11 @@ TODO: convert to dm3
 import os
 import tifffile as tif
 import untangle
+import numpy
 
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog
-from PyQt5.QtGui import QIcon
+import PyQt5.QtWidgets as QtW
+import PyQt5.QtGui as QtG
 
 #%% Camera Length look up dictionary
 def diffperpix(x):
@@ -60,6 +61,9 @@ def diffperpix(x):
 #   Function to get xml from JEOL tif and add as gatan type (ImageJ and Digital
 #   Micrograph readable) of TIFF tags
 def addtiftags(filename):
+
+    foldername = "these_ones_have_scale"
+
     image = tif.imread(filename)
     print(filename)
 
@@ -130,10 +134,12 @@ def addtiftags(filename):
 #%%
 # Main function of the script
 def main():
-    app = QApplication(sys.argv)
+
+    foldername = "these_ones_have_scale"
+    app = QtW.QApplication(sys.argv)
 
     # Open Sesame
-    dirname = str(QFileDialog.getExistingDirectory(None, "Select Directory"))
+    dirname = str(QtW.QFileDialog.getExistingDirectory(None, "Select Directory"))
     os.chdir(dirname)
 
     if len(dirname ) > 0:
@@ -141,7 +147,11 @@ def main():
 
     print(os.getcwd())
     print(os.listdir(os.getcwd()))
-    os.mkdir("these_ones_have_scale") # put files in new folder
+    try:
+        os.mkdir(foldername) # put files in new folder
+    except:
+        print("Can't make folder")
+        pass
 
     for file in os.listdir(os.getcwd()):
         if os.path.isdir(file): continue
@@ -149,16 +159,16 @@ def main():
             print(file)
             filen = os.path.splitext(file)
             if filen[-1] == (".tif" or ".tiff"): # only do TIFF files
-                addtiftags("{}/these_ones_have_scale/{}".format(dirname,file))
+                addtiftags("{}/{}".format(dirname,file))
 
-    sys.exit(app.exec_())
+    app.exec_()
 
 #%%
 if __name__ == "__main__":
     main()
 
 
-
+#%%
 """
 Reference:
  Other important info from xml for possible use in the future?
