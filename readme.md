@@ -11,6 +11,14 @@ Warning: May invalidate Institution/JEOL legal agreements.
     stored in the XML content...
 
 Requirements (install using your favourite python package manager):
- - "untangle" for parsing xml files (e.g. pip install untangle)
- - "tifffile" for editing tiff tags (e.g. pip install tifffile)
- - "tkinter" for file dialogue (e.g. pip install tkinter)
+ - "untangle" for parsing xml files
+ - "tifffile" for editing tiff tags
+ - "PyQt5"
+
+Install (to run on Windows (64-bit)):
+ unzip "tifconverter.zip" to C:\tifconverter\
+ run "jeoltiftodmtif.exe"
+
+
+Install (to compile):
+ pip install tifffile untangle cx_freeze pyqt5
