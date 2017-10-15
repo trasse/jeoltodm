@@ -15,10 +15,8 @@ Requirements (install using your favourite python package manager):
  - "tifffile" for editing tiff tags
  - "PyQt5"
 
-Install (to run on Windows (64-bit)):
- unzip "tifconverter.zip" to C:\tifconverter\
- run "jeoltiftodmtif.exe"
 
 
-Install (to compile):
- pip install tifffile untangle cx_freeze pyqt5
+Install (windows):
+ $ pip install tifffile untangle cx_freeze pyqt5
+ $ python setup.py build
